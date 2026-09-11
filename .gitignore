@@ -10,3 +10,6 @@ odds_ratios.csv
 .Rproj.user/
 __pycache__/
 *.pyc
+
+# Local AI-assistant conventions, not part of the public project
+CLAUDE.md

@@ -27,7 +27,6 @@ used only to orchestrate.
 | `run_model.R` | Standalone script. Reads a CSV, fits the same logistic model as the report, and writes a tidy odds-ratio table with 95% CIs. Takes optional input and output paths as arguments. |
 | `run_from_python.py` | Python orchestrator. Locates `Rscript`, runs `run_model.R` via `subprocess`, and prints the result with pandas. |
 | `06_mixed.R` | Mixed-model exercise on `lme4::sleepstudy`. Fits a naive `lm`, a random-intercept `lmer` and a random-slope `lmer`, prints the ICC and likelihood-ratio test, and compares the `day` effect across models. |
-| `CLAUDE.md` | Project conventions for AI-assisted work. |
 
 ## Reproducing the analysis
 
