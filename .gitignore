@@ -9,3 +9,4 @@ odds_ratios.csv
 .Rproj.user/
 __pycache__/
 *.pyc
+fig_*.png
