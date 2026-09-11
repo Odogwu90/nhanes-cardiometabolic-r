@@ -1,0 +1,11 @@
+# Rendered outputs (regenerate with quarto render / run_from_python.py)
+report.html
+report_files/
+odds_ratios.csv
+
+# R / Python artefacts
+.Rhistory
+.RData
+.Rproj.user/
+__pycache__/
+*.pyc

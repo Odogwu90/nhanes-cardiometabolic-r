@@ -1,0 +1,105 @@
+---
+title: "Cardiometabolic risk in NHANES adults"
+author: "Okpara Onyedikachi Martins"
+date: today
+format:
+  html:
+    toc: true
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r setup}
+library(tidyverse)
+library(gtsummary)
+library(broom)
+
+adults <- read_csv("adults_clean.csv") |>
+  mutate(
+    AgeDecade = str_trim(AgeDecade),
+    smoker = factor(smoker, levels = c("Never", "Former", "Current")),
+    bmi_cat = factor(bmi_cat, levels = c("Underweight", "Normal", "Overweight", "Obese"))
+  )
+```
+
+## Methods
+
+We analysed `r nrow(adults)` adults aged 20 years or older from the NHANES sample.
+Hypertension was defined as systolic BP of 140 mmHg or higher, or diastolic BP of
+90 mmHg or higher, based on measured values only. Obesity was defined as BMI of
+30 kg/m² or higher.
+
+## Results
+
+Hypertension prevalence was `r round(100 * mean(adults$hypertension, na.rm = TRUE), 1)`%
+and obesity prevalence was `r round(100 * mean(adults$obese, na.rm = TRUE), 1)`%.
+
+### Table 1. Characteristics by diabetes status
+
+```{r table1}
+adults |>
+  select(Age, Gender, BMI, bmi_cat, BPSysAve, TotChol, PhysActive, smoker, hypertension, Diabetes) |>
+  tbl_summary(
+    by = Diabetes,
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})",
+      TotChol ~ "{median} ({p25}, {p75})"
+    ),
+    label = list(
+      BPSysAve ~ "Systolic BP (mmHg)",
+      BMI ~ "BMI (kg/m²)",
+      bmi_cat ~ "BMI category",
+      TotChol ~ "Total cholesterol (mmol/L)"
+    ),
+    missing = "no"
+  ) |>
+  add_p() |>
+  add_overall() |>
+  bold_labels()
+```
+
+### Figure 1. Hypertension prevalence by age and sex
+
+```{r fig1}
+adults |>
+  filter(!is.na(AgeDecade), !is.na(hypertension)) |>
+  group_by(AgeDecade, Gender) |>
+  summarise(prev = mean(hypertension), .groups = "drop") |>
+  ggplot(aes(AgeDecade, prev, fill = Gender)) +
+  geom_col(position = "dodge") +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "Age (years)", y = "Prevalence", fill = "Sex") +
+  theme_minimal()
+```
+
+### Figure 2. Obesity prevalence by age and sex
+
+```{r fig2}
+adults |>
+  filter(!is.na(AgeDecade), !is.na(obese)) |>
+  group_by(AgeDecade, Gender) |>
+  summarise(prev = mean(obese), .groups = "drop") |>
+  ggplot(aes(AgeDecade, prev, fill = Gender)) +
+  geom_col(position = "dodge") +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "Age (years)", y = "Prevalence", fill = "Sex") +
+  theme_minimal()
+```
+
+### Table 2. Adjusted odds ratios for diabetes
+
+```{r model}
+m <- glm(factor(Diabetes) ~ BMI + PhysActive + smoker + Age + Gender,
+         data = adults, family = binomial)
+
+or_bmi <- tidy(m, exponentiate = TRUE, conf.int = TRUE) |>
+  filter(term == "BMI")
+
+tbl_regression(m, exponentiate = TRUE) |> bold_p()
+```
+
+After adjustment for physical activity, smoking, age and sex, each one-unit
+increase in BMI was associated with `r round(or_bmi$estimate, 2)` times the odds
+of diabetes (95% CI `r round(or_bmi$conf.low, 2)` to `r round(or_bmi$conf.high, 2)`).
