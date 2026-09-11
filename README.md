@@ -98,6 +98,12 @@ increased by 10.5 ms per day (95% CI 7.2 to 13.7).
 
 ![Reaction time trajectories by subject](fig_sleep_trajectories.png)
 
+## About this project
+
+This is a self-directed learning project built with AI assistance. All
+analyses were run, checked and interpreted by me, and I can explain every
+step of the code and every result reported here.
+
 ## Data source
 
 NHANES (US National Health and Nutrition Examination Survey), via the
