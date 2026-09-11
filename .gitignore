@@ -1,6 +1,7 @@
 # Rendered outputs (regenerate with quarto render / run_from_python.py)
 report.html
-report_files/
+report_files/*
+!report_files/figure-html/
 odds_ratios.csv
 
 # R / Python artefacts
@@ -9,4 +10,3 @@ odds_ratios.csv
 .Rproj.user/
 __pycache__/
 *.pyc
-fig_*.png
