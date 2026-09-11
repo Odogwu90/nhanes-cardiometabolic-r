@@ -1,0 +1,6 @@
+# Normalise all text files to LF in the repo and on checkout,
+# so Windows autocrlf settings cannot cause spurious diffs.
+* text=auto eol=lf
+
+# Binary-ish data: keep as-is
+*.csv text eol=lf
