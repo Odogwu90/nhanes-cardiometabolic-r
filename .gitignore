@@ -11,5 +11,3 @@ odds_ratios.csv
 __pycache__/
 *.pyc
 
-# Local AI-assistant conventions, not part of the public project
-CLAUDE.md
